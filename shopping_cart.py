@@ -39,4 +39,20 @@ def to_usd(my_price):
 
 # TODO: write some Python code here to produce the desired output
 
-print(products)
+#print(products)
+
+#Inputting product identifier (and storing variables in product_ids), validating data, and enabeling user to end with "DONE"
+options = [item["id"]for item in products]
+product_ids = []
+while True:
+    selected_id = input("Please input a product identifier (1-20 are valid). If done searching for products, input 'DONE'.")
+    if selected_id not in str(options) and selected_id != "DONE":
+        print("Are you sure that product identifier is correct? Please try again.")
+        exit() 
+    if selected_id == "DONE":
+        break
+    else:
+        if selected_id in str(options):
+            product_ids.append(int(selected_id))
+
+
