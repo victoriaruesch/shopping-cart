@@ -46,7 +46,7 @@ options = [item["id"]for item in products]
 product_ids = []
 while True:
     selected_id = input("Please input a product identifier (1-20 are valid). If done searching for products, input 'DONE'.")
-    if selected_id not in str(options) and selected_id != "DONE":
+    if selected_id not in str(options) and selected_id != "DONE" and selected_id == "":
         print("Are you sure that product identifier is correct? Please try again.")
     if selected_id == "DONE":
         break
@@ -65,18 +65,18 @@ print("CHECKOUT AT:", now.strftime("%Y-%m-%d %H:%M %p"))
 print("------------------------------------")
 
 #print selected items + their price + total price
-total_price = 0
+subtotal_price = 0
 print("SELECTED PRODUCTS INCLUDE:")
 for selected_id in product_ids:
     matching_products = [item for item in products if item["id"]== selected_id]
     matching_product = matching_products[0] 
     print("*", matching_product["name"], "("+to_usd(matching_product['price'])+")")
-    total_price = total_price + matching_product['price']
-
+    subtotal_price = subtotal_price + matching_product['price']
 print("------------------------------------")
-print("SUBTOTAL:",total_price)
-print("TAX:")
-print("TOTAL:")
+print("SUBTOTAL:",to_usd(subtotal_price))
+tax= subtotal_price*0.0875
+print("TAX:", to_usd(tax))
+print("TOTAL:", to_usd(subtotal_price+tax))
 print("------------------------------------")
 print("THANKS, SEE YOU AGAIN SOON!")
 print("------------------------------------")
