@@ -41,7 +41,7 @@ def to_usd(my_price):
 
 #print(products)
 
-#Inputting product identifier (and storing variables in product_ids), validating data, and enabeling user to end with "DONE"
+#inputting product identifier (+ storing variables in product_ids) + validating data + enabeling user to end with "DONE"
 options = [item["id"]for item in products]
 product_ids = []
 while True:
@@ -54,14 +54,29 @@ while True:
         if selected_id in str(options):
             product_ids.append(int(selected_id))
 
-#print selected items and get price
+#receipt with grocerystore info + date and time
+from datetime import datetime
+now = datetime.now()
+print("------------------------------------")
+print("FOXTROT MARKET")
+print("WWW.FOXTROT-MARKET.COM")
+print("------------------------------------")
+print("CHECKOUT AT:", now.strftime("%Y-%m-%d %H:%M %p"))
+print("------------------------------------")
+
+#print selected items + their price + total price
 total_price = 0
 print("SELECTED PRODUCTS INCLUDE:")
 for selected_id in product_ids:
     matching_products = [item for item in products if item["id"]== selected_id]
-    matching_product = matching_products[0] #not sure about this line
+    matching_product = matching_products[0] 
     print("*", matching_product["name"], "("+to_usd(matching_product['price'])+")")
     total_price = total_price + matching_product['price']
-#    print(total_price) MOVE THIS!!
 
-
+print("------------------------------------")
+print("SUBTOTAL:",total_price)
+print("TAX:")
+print("TOTAL:")
+print("------------------------------------")
+print("THANKS, SEE YOU AGAIN SOON!")
+print("------------------------------------")
