@@ -54,9 +54,14 @@ while True:
         if selected_id in str(options):
             product_ids.append(int(selected_id))
 
-#print selected items
-print("SELECTED PRODUCTS INCLUDE:", product_ids)
+#print selected items and get price
+total_price = 0
+print("SELECTED PRODUCTS INCLUDE:")
 for selected_id in product_ids:
     matching_products = [item for item in products if item["id"]== selected_id]
-    matching_products = matching_products[0] #not sure about this line
-    print(matching_products)
+    matching_product = matching_products[0] #not sure about this line
+    print("*", matching_product["name"], "("+to_usd(matching_product['price'])+")")
+    total_price = total_price + matching_product['price']
+#    print(total_price) MOVE THIS!!
+
+
