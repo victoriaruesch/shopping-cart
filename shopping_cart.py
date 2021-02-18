@@ -41,12 +41,19 @@ def to_usd(my_price):
 
 #print(products)
 
+import os
+
+from dotenv import load_dotenv
+
+load_dotenv()
+TAX_RATE = os.getenv("TAX_RATE",default=0.0875)
+
 #inputting product identifier (+ storing variables in product_ids) + validating data + enabeling user to end with "DONE"
 options = [item["id"]for item in products]
 product_ids = []
 while True:
     selected_id = input("Please input a product identifier (1-20 are valid). If done searching for products, input 'DONE'.")
-    if selected_id not in str(options) and selected_id != "DONE" and selected_id == "":
+    if selected_id not in str(options) and selected_id != "DONE":
         print("Are you sure that product identifier is correct? Please try again.")
     if selected_id == "DONE":
         break
@@ -59,9 +66,10 @@ from datetime import datetime
 now = datetime.now()
 print("------------------------------------")
 print("FOXTROT MARKET")
-print("WWW.FOXTROT-MARKET.COM")
 print("------------------------------------")
-print("CHECKOUT AT:", now.strftime("%Y-%m-%d %H:%M %p"))
+print("WEB: WWW.FOXTROT-MARKET.COM")
+print("PHONE: 1 (202) 337-5683")
+print("CHECKOUT TIME:", now.strftime("%Y-%m-%d %H:%M %p"))
 print("------------------------------------")
 
 #print selected items + their price + total price
@@ -74,7 +82,7 @@ for selected_id in product_ids:
     subtotal_price = subtotal_price + matching_product['price']
 print("------------------------------------")
 print("SUBTOTAL:",to_usd(subtotal_price))
-tax= subtotal_price*0.0875
+tax= subtotal_price* float(TAX_RATE)
 print("TAX:", to_usd(tax))
 print("TOTAL:", to_usd(subtotal_price+tax))
 print("------------------------------------")
