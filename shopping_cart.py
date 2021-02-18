@@ -48,11 +48,15 @@ while True:
     selected_id = input("Please input a product identifier (1-20 are valid). If done searching for products, input 'DONE'.")
     if selected_id not in str(options) and selected_id != "DONE":
         print("Are you sure that product identifier is correct? Please try again.")
-        exit() 
     if selected_id == "DONE":
         break
     else:
         if selected_id in str(options):
             product_ids.append(int(selected_id))
 
-
+#print selected items
+print("SELECTED PRODUCTS INCLUDE:", product_ids)
+for selected_id in product_ids:
+    matching_products = [item for item in products if item["id"]== selected_id]
+    matching_products = matching_products[0] #not sure about this line
+    print(matching_products)
