@@ -39,13 +39,15 @@ def to_usd(my_price):
 
 # TODO: write some Python code here to produce the desired output
 
-#print(products)
+print(products)
 
 import os
-
 from dotenv import load_dotenv
+from sendgrid import SendGridAPIClient
+from sendgrid.helpers.mail import Mail
 
 load_dotenv()
+#tax rate variable
 TAX_RATE = os.getenv("TAX_RATE",default=0.0875)
 
 #inputting product identifier (+ storing variables in product_ids) + validating data + enabeling user to end with "DONE"
@@ -74,12 +76,14 @@ print("------------------------------------")
 
 #print selected items + their price + total price
 subtotal_price = 0
+products_emailreceipt = []
 print("SELECTED PRODUCTS INCLUDE:")
 for selected_id in product_ids:
     matching_products = [item for item in products if item["id"]== selected_id]
     matching_product = matching_products[0] 
     print("*", matching_product["name"], "("+to_usd(matching_product['price'])+")")
     subtotal_price = subtotal_price + matching_product['price']
+    products_emailreceipt.append(matching_product)
 print("------------------------------------")
 print("SUBTOTAL:",to_usd(subtotal_price))
 tax= subtotal_price* float(TAX_RATE)
@@ -88,3 +92,34 @@ print("TOTAL:", to_usd(subtotal_price+tax))
 print("------------------------------------")
 print("THANKS, SEE YOU AGAIN SOON!")
 print("------------------------------------")
+
+email_receipt = input("Would you like an email receipt? (Yes or No)")
+if email_receipt.lower() == "yes":
+    email_address = input("Please enter your email address.")
+    #sending email receipts 
+    SENDGRID_API_KEY = os.getenv("SENDGRID_API_KEY", default="OOPS, please set env var called 'SENDGRID_API_KEY'")
+    SENDGRID_TEMPLATE_ID = os.getenv("SENDGRID_TEMPLATE_ID", default="OOPS, please set env var called 'SENDGRID_TEMPLATE_ID'")
+    SENDER_ADDRESS = os.getenv("SENDER_ADDRESS", default="OOPS, please set env var called 'SENDER_ADDRESS'")
+        # this must match the test data structure
+    template_data = {
+        "total_price_usd": to_usd(subtotal_price+tax) ,
+        "human_friendly_timestamp": now.strftime("%Y-%m-%d %H:%M %p"),
+        "products": products_emailreceipt
+    }# or construct this dictionary dynamically based on the results of some other process :-D
+    client = SendGridAPIClient(SENDGRID_API_KEY)
+    print("CLIENT:", type(client))
+    message = Mail(from_email=SENDER_ADDRESS, to_emails=email_address)
+    message.template_id = SENDGRID_TEMPLATE_ID
+    message.dynamic_template_data = template_data
+    print("MESSAGE:", type(message))
+    try: 
+        response = client.send(message)
+        print("RESPONSE:", type(response))
+        print(response.status_code)
+        print(response.body)
+        print(response.headers)
+    except Exception as err:
+        print(type(err))
+        print(err) 
+    
+    
