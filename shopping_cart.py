@@ -39,7 +39,7 @@ def to_usd(my_price):
 
 # TODO: write some Python code here to produce the desired output
 
-print(products)
+# print(products)
 
 import os
 from dotenv import load_dotenv
